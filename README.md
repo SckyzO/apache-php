@@ -9,9 +9,11 @@ This is an example run LAMP server with Traefik, with SSL, at https://dev.domain
 
 ```yaml
 version: '3.6'
-
 services:
 
+################
+# APACHE + PHP #
+################
   httpd-php:
     image: sckyzo/apache-php:7.3
     container_name: lamp_httpd-php
@@ -45,11 +47,11 @@ services:
       - "traefik.frontend.headers.frameDeny=true"
       - "traefik.frontend.headers.customFrameOptionsValue=SAMEORIGIN"
 
-
-# MYSQL
+###########
+# MARIADB #
+###########
   lamp_mariadb:
-    hostname: nextcloud-db
-    container_name: nextcloud-db
+    container_name: lamp_mariadb
     image: mariadb:10
     restart: unless-stopped
     volumes:
@@ -61,10 +63,11 @@ services:
       - MYSQL_ROOT_PASSWORD=MyMegaSuperPassw0rd
     networks:
       - default
-
-# Redis
-  redis:
-    container_name: redis
+#########
+# Redis #
+#########
+  lamp_redis:
+    container_name: lamp_redis
     image: redis:alpine
     restart: unless-stopped
     volumes:
