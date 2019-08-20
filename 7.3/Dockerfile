@@ -26,7 +26,7 @@ RUN apt-get update -q --fix-missing && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # PHP Extensions
-RUN docker-php-ext-install -j$(nproc) opcache pdo_mysql curl mbstring gd zip
+RUN docker-php-ext-install -j$(nproc) opcache pdo_mysql curl mbstring gd zip iconv gd 
 ADD conf/php.ini /usr/local/etc/php/conf.d/app.ini
 
 # Apache
@@ -35,4 +35,4 @@ RUN a2enmod rewrite headers
 ADD conf/vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD conf/apache.conf /etc/apache2/conf-available/z-app.conf
 RUN a2enconf z-app
-ADD index.php /app/index.php
+ADD files/index.php /app/index.php
