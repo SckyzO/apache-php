@@ -1,5 +1,5 @@
 # Docker PHP Apache
-A Docker image for PHP apps. Works with Apache and PHP 5.6, 7.1, 7.2 and provide a Symfony variant.
+A Docker image for PHP apps. Works with Apache and PHP 7.3 from debian buster
 
 * Docker image: https://hub.docker.com/r/sckyzo/apache-php
 
@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.backend=dev"
-      - "traefik.frontend.rule=Host:dev.${DOMAINNAME}"
+      - "traefik.frontend.rule=Host:dev.example.com"
       - "traefik.port=80"
       - "traefik.docker.network=traefik_proxy"
       - "traefik.frontend.headers.SSLRedirect=true"
@@ -41,7 +41,7 @@ services:
       - "traefik.frontend.headers.browserXSSFilter=true"
       - "traefik.frontend.headers.contentTypeNosniff=true"
       - "traefik.frontend.headers.forceSTSHeader=true"
-      - "traefik.frontend.headers.SSLHost=${DOMAINNAME}"
+      - "traefik.frontend.headers.SSLHost=example.com"
       - "traefik.frontend.headers.STSIncludeSubdomains=true"
       - "traefik.frontend.headers.STSPreload=true"
       - "traefik.frontend.headers.frameDeny=true"
@@ -63,6 +63,7 @@ services:
       - MYSQL_ROOT_PASSWORD=MyMegaSuperPassw0rd
     networks:
       - default
+
 #########
 # Redis #
 #########
@@ -74,7 +75,6 @@ services:
       - ./docker/webserver/redis:/data
     networks:
       - default
-
 
 
 ###########
