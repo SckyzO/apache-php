@@ -8,12 +8,15 @@ A Docker image for PHP apps. Works with Apache and PHP 7.3 from debian buster
 With this apache configuration, I added 3 errors pages :
 
 Error Page 403: 
+
 ![Error 403](Screenshots/403.png =250x)
 
 Error Page 404: 
+
 ![Error 404](Screenshots/404.png =250x)
 
 Error Page 500: 
+
 ![Error 50x](Screenshots/500.png =250x)
 
 # Install with docker-compose with Traefik + SSL
