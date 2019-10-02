@@ -3,9 +3,19 @@ A Docker image for PHP apps. Works with Apache and PHP 7.3 from debian buster
 
 * Docker image: https://hub.docker.com/r/sckyzo/apache-php
 
+# Customs errors pages
+
+With this apache configuration, I added 3 errors pages :
+
+![Error 403](Screenshots/403.png)
+
+![Error 404](Screenshots/404.png)
+
+![Error 50x](Screenshots/500.png)
+
 # Install with docker-compose with Traefik + SSL
 
-This is an example run LAMP server with Traefik, with SSL, at https://dev.domain.com
+This is an example run LAMP server with Traefik 1.7, with SSL, at https://dev.domain.com
 
 ```yaml
 version: '3.6'
@@ -36,15 +46,6 @@ services:
       - "traefik.frontend.rule=Host:dev.example.com"
       - "traefik.port=80"
       - "traefik.docker.network=traefik_proxy"
-      - "traefik.frontend.headers.SSLRedirect=true"
-      - "traefik.frontend.headers.STSSeconds=315360000"
-      - "traefik.frontend.headers.browserXSSFilter=true"
-      - "traefik.frontend.headers.contentTypeNosniff=true"
-      - "traefik.frontend.headers.forceSTSHeader=true"
-      - "traefik.frontend.headers.SSLHost=example.com"
-      - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      - "traefik.frontend.headers.STSPreload=true"
-      - "traefik.frontend.headers.frameDeny=true"
       - "traefik.frontend.headers.customFrameOptionsValue=SAMEORIGIN"
 
 ###########
