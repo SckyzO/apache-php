@@ -3,18 +3,48 @@ A Docker image for PHP apps. Works with Apache and PHP 7.3 from debian buster
 
 * Docker image: https://hub.docker.com/r/sckyzo/apache-php
 
+# Native h5ai support with this container
+
+I added in apache.conf file support of h5ai : 
+
+```apacheconf
+DirectoryIndex  index.html  index.php  /_h5ai/public/index.php
+```
+After run your container and configure your _www_ folder, download h5ai zip file and unzip it in your _www_ folder.
+
+*example :*
+```bash
+cd ./docker/webserver/www
+wget https://release.larsjung.de/h5ai/h5ai-0.29.2.zip
+unzip h5ai-0.29.2.zip
+```
+
+You can update h5ai configuration : 
+```
+vim ./docker/webserver/www/_h5ai/private/conf/options.json
+```
 # Customs errors pages
 
 With this apache configuration, I added 3 errors pages :
 
+```apacheconf
+Alias /_errors/ /errors/
+ErrorDocument 404 /_errors/404.html
+ErrorDocument 403 /_errors/403.html
+ErrorDocument 500 /_errors/500.html
+```
+
 Error Page 403: 
-![Error 403](Screenshots/403.png =250x)
+
+![Error 403](Screenshots/403.png)
 
 Error Page 404: 
-![Error 404](Screenshots/404.png =250x)
+
+![Error 404](Screenshots/404.png)
 
 Error Page 500: 
-![Error 50x](Screenshots/500.png =250x)
+
+![Error 50x](Screenshots/500.png)
 
 # Install with docker-compose with Traefik + SSL
 
