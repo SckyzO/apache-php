@@ -20,6 +20,7 @@ RUN apt-get update -q --fix-missing && \
     zlib1g-dev \
     libmcrypt-dev \
     libpng-dev \
+    libonig-dev \
     libcurl4 \
     libcurl4-gnutls-dev && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
