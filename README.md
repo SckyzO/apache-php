@@ -1,5 +1,5 @@
 # Docker PHP Apache
-A Docker image for PHP apps. Works with Apache and PHP 7.3 from debian buster
+A Docker image for PHP apps. Works with Apache and PHP 8 from debian buster
 
 * Docker image: https://hub.docker.com/r/sckyzo/apache-php
 
@@ -12,17 +12,20 @@ DirectoryIndex  index.html  index.php  /_h5ai/public/index.php
 ```
 After run your container and configure your _www_ folder, download h5ai zip file and unzip it in your _www_ folder.
 
-*example :*
+**example :**
+
 ```bash
 cd ./docker/webserver/www
-wget https://release.larsjung.de/h5ai/h5ai-0.29.2.zip
-unzip h5ai-0.29.2.zip
+wget https://release.larsjung.de/h5ai/h5ai-0.30.0.zip
+unzip h5ai-0.30.0.zip
 ```
 
 You can update h5ai configuration : 
+
 ```
 vim ./docker/webserver/www/_h5ai/private/conf/options.json
 ```
+
 # Customs errors pages
 
 With this apache configuration, I added 3 errors pages :
@@ -48,25 +51,24 @@ Error Page 500:
 
 # Install with docker-compose with Traefik + SSL
 
-This is an example run LAMP server with Traefik 1.7, with SSL, at https://dev.domain.com
+This is an example run HTTP server with Traefik 2
 
 ```yaml
-version: '3.6'
+version: '3'
 services:
 
 ################
 # APACHE + PHP #
 ################
   httpd-php:
-    image: sckyzo/apache-php:7.3
-    container_name: lamp_httpd-php
+    image: sckyzo/apache-php:latest
+    container_name: httpd-php
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/webserver/www:/app
     networks:
       - traefik_proxy
-      - default
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
       interval: 30s
@@ -74,42 +76,13 @@ services:
       retries: 3
       start_period: 1m
     labels:
-      - "traefik.enable=true"
-      - "traefik.backend=dev"
-      - "traefik.frontend.rule=Host:dev.example.com"
-      - "traefik.port=80"
-      - "traefik.docker.network=traefik_proxy"
-      - "traefik.frontend.headers.customFrameOptionsValue=SAMEORIGIN"
-
-###########
-# MARIADB #
-###########
-  lamp_mariadb:
-    container_name: lamp_mariadb
-    image: mariadb:10
-    restart: unless-stopped
-    volumes:
-      - ./docker/webserver/mariadb:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=my_database
-      - MYSQL_USER=Mr.Robot
-      - MYSQL_PASSWORD=MySuperPassw0rd
-      - MYSQL_ROOT_PASSWORD=MyMegaSuperPassw0rd
-    networks:
-      - default
-
-#########
-# Redis #
-#########
-  lamp_redis:
-    container_name: lamp_redis
-    image: redis:alpine
-    restart: unless-stopped
-    volumes:
-      - ./docker/webserver/redis:/data
-    networks:
-      - default
-
+    labels:
+      traefik.enable: true
+      traefik.docker.network: traefik_proxy
+      traefik.http.routers.h5ai.entrypoints: websecure
+      traefik.http.routers.h5ai.rule: Host(`website.com`) 
+      traefik.http.routers.h5ai.service: h5ai
+      traefik.http.services.h5ai.loadbalancer.server.port: 80
 
 ###########
 # NETWORK #
@@ -118,6 +91,4 @@ networks:
   traefik_proxy:
     external:
       name: traefik_proxy
-  default:
-    driver: bridge
 ```
