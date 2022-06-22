@@ -26,4 +26,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/apache-php:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/apache-php:latest,  ${{ secrets.DOCKER_HUB_USERNAME }}/apache-php:8
